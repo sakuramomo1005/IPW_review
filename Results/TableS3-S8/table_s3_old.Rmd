@@ -1,0 +1,118 @@
+---
+output: pdf_document
+classoption: 
+  - landscape
+  - b4paper
+header-includes:
+    - \usepackage{caption}
+fontsize: 8 pt 
+geometry: tmargin=1.8cm,bmargin=1.8cm,lmargin=0.1cm,rmargin=0.1cm
+---
+
+\captionsetup[table]{labelformat=empty}
+\pagestyle{empty}
+
+
+
+```{R include = FALSE}
+setwd('/Users/yaolanqiu/Documents/IPW/Editing 2019-4-10/common code')
+source('table_generation.R')
+
+
+## draw ipw cra tables
+setwd('/Users/yaolanqiu/Documents/IPW/IPW_final_0922/data/geeM')
+
+
+res_name = 'geem'
+res_mmi_name = 'geem_mmi'
+k_set = c(10, 25, 50)
+icc_set = c(0.05, 0.1, 0.2)
+iccm_set = c(0, 0.1, 0.3, 0.5)
+table = tables_ipw_cra_mmi(k_set, icc_set, iccm_set, res_name, res_mmi_name)
+
+library(knitr)
+library(kableExtra)
+
+table_ind = table$table_ind[, 1:23] 
+table_ex =table$table_ex[, 1:23] 
+
+table_ind[,1] = rep(k_set,each = 12)
+table_ex[,1] = rep(k_set,each = 12)
+
+
+table_ind[, 9:13] = table_ind[, 9:13]*100
+table_ex[, 9:13] = table_ex[, 9:13]*100
+
+table_ind = round(table_ind, 3)
+table_ex = round(table_ex, 3)
+
+table_ind = cbind(table_ind[,1:3],formatC(table_ind[,4:13],1,format="f"),
+                  formatC(table_ind[,14:23],3,format="f"))
+
+table_ex = cbind(table_ex[,1:3],formatC(table_ex[,4:13],1,format="f"),
+                 formatC(table_ex[,14:23],3,format="f"))
+
+for(i in 1:dim(table_ex)[1]){
+  if(i %% 12 == 1){
+    table_ex[i,1] = table_ex[i,1] 
+  }else{
+    table_ex[i,1] = ' '
+  }
+}
+
+for(i in 1:dim(table_ind)[1]){
+  if(i %% 12 == 1){
+    table_ind[i,1] = table_ind[i,1] 
+  }else{
+    table_ind[i,1] = ' '
+  }
+}
+
+for(i in 1:dim(table_ex)[1]){
+  if(i %% 4 == 1){
+    table_ex[i,2] = table_ex[i,2] 
+  }else{
+    table_ex[i,2] = ' '
+  }
+}
+
+for(i in 1:dim(table_ind)[1]){
+  if(i %% 4 == 1){
+    table_ind[i,2] = table_ind[i,2] 
+  }else{
+    table_ind[i,2] = ' '
+  }
+}
+
+linesep = c('', '', '', '\\addlinespace')
+
+```
+
+
+```{R echo = FALSE}
+
+kable(table_ex, "latex", align="c",
+      booktabs=TRUE, escape = F,   
+      linesep=linesep,   
+      row.names=FALSE, longtable = T,
+      col.names = linebreak(c("k",'$\\rho_O$','$\\rho_M$',
+                              rep(c('CRA-\nGEE','A-CRA-\nGEE',
+                                    'W-\nGEE','CW-\nGEE','MMI-\nGEE'),4)
+      )),
+      caption = 'Table S3: Simulation study results summary with exchangeable working correlation matrix') %>%
+  footnote(general=c("k= $\\\\#$ clusters per arm; $\\\\rho_O$ is the ICC of the (conditional) outcome model (see Eqn. 6 in the manuscript text);  $\\\\rho_M$ is the ICC of the probability of missing (POM) model (see Eqn. 7B in the manuscript text); MCSD = Monte Carlo standard deviation.","Note that all GEE models converged except for 5 W-GEE and approximately 100 for CW-GEE across all simulations, with almost all issues in the small sample case (i.e. k=10)."),
+           threeparttable = T,
+           footnote_as_chunk=TRUE, 
+           escape=FALSE) %>%
+  add_header_above(header = c(" " = 1,
+                              " " = 1,
+                              " " = 1,
+                              "Mean relative bias (%)"=5,
+                              "Coverage (%)"=5,
+                              "Mean SE"=5,
+                              "MCSD"=5)) 
+```
+
+
+
+
