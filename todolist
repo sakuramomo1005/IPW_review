@@ -1,0 +1,12 @@
+2019-05-12
+
+1. check the my pool function for:
+   
+   * old dataset
+   * small icc, icc - 0.01
+   * withinteraction
+   
+   - df_com*((df_com+1)/(df_com+3))*(1/parenthesis) or df_com*((df_com+1)/(df_com+3))*(1 - 1/parenthesis)?
+   - check check check
+   
+2. proofreading the generated supplymentary
