@@ -1,1 +1,20 @@
-1
+Bug1: 
+* Date: 2018-09
+* Description: MMI overestimate. 
+* Reason: 
+  + Wrong calculation of pool function (error in within-imputation variance and between-imputation variance formular)
+  + Degree of freedom without small sample adjustment 
+  
+Bug2:   
+* Date: 2019-04
+* Description: wrong pool function application
+* Reason:
+  + mypool(mmi_est_ind,mmi_std_ind,num=Nimp,J = k)
+  + Did not change the default value of number of clusters J 
+
+Bug3: 
+* Date: 2019-05
+* Description: typo in the input of mypool function
+* Reason:
+  + mmi_est_ex <- c(mmi_est_ind,t2)     % should be "mmi_est_ex"
+  + mmi_std_ex <- c(mmi_std_ind,std2)
