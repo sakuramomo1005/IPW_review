@@ -18,3 +18,7 @@ Bug3:
 * Reason:
   + mmi_est_ex <- c(mmi_est_ind,t2)     % should be "mmi_est_ex"
   + mmi_std_ex <- c(mmi_std_ind,std2)
+  
+Bug4: 
+* Date: 2019-05-15
+* Description: no interaction term in the imputation formula
